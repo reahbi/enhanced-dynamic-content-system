@@ -230,7 +230,7 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
     return html
   }
 
-  const transformContent = async (transformationType: 'humanize' | 'simplify' | 'practical') => {
+  const transformContent = async (transformationType: 'humanize' | 'simplify' | 'practical' | 'natural_format') => {
     setTransforming(true)
     try {
       const response = await axios.post('/api/v1/contents/transform', {
@@ -245,7 +245,8 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
       const messages = {
         humanize: '사람이 쓴 것처럼 자연스럽게 변환되었습니다',
         simplify: '쉽고 이해하기 쉽게 변환되었습니다',
-        practical: '실용적이고 행동 중심으로 변환되었습니다'
+        practical: '실용적이고 행동 중심으로 변환되었습니다',
+        natural_format: '자연스러운 서식으로 변환되었습니다'
       }
       alert(messages[transformationType])
       
@@ -479,10 +480,21 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
                       setShowTransformMenu(false)
                     }}
                     disabled={transforming}
-                    className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-100"
                   >
                     <div className="font-medium">💪 실용적으로</div>
                     <div className="text-xs text-gray-500 mt-1">이론보다 실천 방법 중심으로</div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      transformContent('natural_format')
+                      setShowTransformMenu(false)
+                    }}
+                    disabled={transforming}
+                    className="block w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <div className="font-medium">✍️ 자연스러운 서식</div>
+                    <div className="text-xs text-gray-500 mt-1">AI 특유의 형식을 제거하고 자연스럽게</div>
                   </button>
                 </div>
               )}
