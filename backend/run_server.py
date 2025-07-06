@@ -61,7 +61,7 @@ def kill_existing_servers():
     killed_processes = []
     
     # 특정 포트에서 실행 중인 프로세스 찾기
-    ports_to_check = [8080, 3000, 3001, 3002, 3003, 5173]  # 백엔드, 프론트엔드 포트들
+    ports_to_check = [8000, 8080, 3000, 3001, 3002, 3003, 3008, 5173]  # 백엔드, 프론트엔드 포트들
     
     for port in ports_to_check:
         try:
@@ -265,20 +265,25 @@ def run_server(
         logger.info(f"📖 대체 API 문서: http://{host}:{port}/redoc")
         
         if frontend_process:
-            logger.info(f"📱 프론트엔드: http://localhost:3000")
+            logger.info(f"📱 프론트엔드: http://localhost:3008")
         
         logger.info("=" * 60)
         
         # 개발/프로덕션 모드 설정
         if reload:
             logger.info("🔧 개발 모드로 실행 중 (자동 리로드 활성화)")
+            # semaphore 경고 무시를 위한 환경 변수 설정
+            env = os.environ.copy()
+            env['PYTHONWARNINGS'] = 'ignore:resource_tracker'
+            
             uvicorn.run(
                 "app.main:app",  # 실제 구현된 main 사용
                 host=host,
                 port=port,
                 reload=reload,
                 log_level=log_level,
-                reload_dirs=["./"]
+                reload_dirs=["./"],
+                workers=1  # 단일 워커로 실행하여 multiprocessing 문제 방지
             )
         else:
             logger.info(f"🏭 프로덕션 모드로 실행 중 (워커: {workers or '자동'})")

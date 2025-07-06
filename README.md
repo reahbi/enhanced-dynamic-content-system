@@ -47,7 +47,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 uvicorn app.main:app --reload
 ```
 
-Backend API: http://localhost:8000/docs
+Backend API: http://localhost:8080/docs
 
 ### 3. Frontend 실행
 
@@ -57,7 +57,7 @@ npm install
 npm run dev
 ```
 
-Frontend App: http://localhost:3000
+Frontend App: http://localhost:3008
 
 ## 📁 프로젝트 구조
 

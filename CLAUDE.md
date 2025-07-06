@@ -12,7 +12,7 @@ This repository contains a **complete full-stack implementation** of the Enhance
 - ✅ **Services**: 15+ specialized services including Native Thinking Mode
 - ✅ **API**: 30+ endpoints across categories, papers, contents, health, cache, analytics
 - ✅ **Development Environment**: Complete setup with scripts and configurations
-- ✅ **Server**: Running at http://127.0.0.1:8000 (Backend) and http://localhost:5173 (Frontend)
+- ✅ **Server**: Running at http://127.0.0.1:8080 (Backend) and http://localhost:3008 (Frontend)
 
 ## Key Architecture Components
 
@@ -261,9 +261,9 @@ cd /home/nosky/logic/frontend
 npm run dev
 
 # 🌐 접속 주소:
-# Backend API: http://127.0.0.1:8000
-# API 문서: http://127.0.0.1:8000/docs
-# Frontend: http://localhost:5173
+# Backend API: http://127.0.0.1:8080
+# API 문서: http://127.0.0.1:8080/docs
+# Frontend: http://localhost:3008
 
 # 📦 의존성 설치 (필요시)
 # Backend
@@ -274,7 +274,7 @@ cd frontend && npm install
 ```
 
 ### 🚀 Current Running Status
-- ✅ **Backend Server**: http://127.0.0.1:8000 (실행 중)
+- ✅ **Backend Server**: http://127.0.0.1:8080 (실행 중)
 - ✅ **Gemini API**: 설정 완료 (API Key 로드됨)
 - ✅ **Environment**: development 모드
 - ⏳ **Frontend**: 준비 완료 (npm run dev로 시작 가능)
