@@ -674,11 +674,12 @@ async def transform_content(
         metadata['transformation_type'] = request.transformation_type.value
         metadata['original_content_id'] = request.content_id
         metadata['transformed_at'] = datetime.now().isoformat()
+        metadata['is_transformed'] = True
         
         # 변환된 콘텐츠 저장
         db_transformed = ContentModel(
             id=new_content_id,
-            topic=f"{db_content.topic} (변환됨)",
+            topic=f"{db_content.topic} ({request.transformation_type.value})",
             category_id=db_content.category_id,
             paper_id=db_content.paper_id,
             content_type=db_content.content_type,
@@ -714,6 +715,106 @@ async def transform_content(
     except Exception as e:
         app_logger.error(f"콘텐츠 변환 실패: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="콘텐츠 변환 중 오류가 발생했습니다")
+
+@router.get("/transformations/{content_id}")
+async def get_content_transformations(
+    content_id: str,
+    db: Session = Depends(get_db)
+):
+    """특정 콘텐츠의 모든 변환 버전 조회"""
+    try:
+        # 원본 콘텐츠 조회
+        original = db.query(ContentModel).filter(ContentModel.id == content_id).first()
+        if not original:
+            raise HTTPException(status_code=404, detail="콘텐츠를 찾을 수 없습니다")
+        
+        # 이 콘텐츠의 모든 변환 버전 찾기
+        transformations = []
+        
+        # 1. 이 콘텐츠가 원본인 경우, 변환된 버전들 찾기
+        transformed_contents = db.query(ContentModel).filter(
+            ContentModel.content_metadata.contains(f'"original_content_id": "{content_id}"')
+        ).all()
+        
+        # 2. 이 콘텐츠가 변환된 것인 경우, 원본 찾기
+        metadata = json.loads(original.content_metadata) if original.content_metadata else {}
+        original_id = metadata.get('original_content_id')
+        
+        if original_id:
+            # 원본 찾기
+            original_content = db.query(ContentModel).filter(ContentModel.id == original_id).first()
+            if original_content:
+                transformations.append({
+                    "id": original_content.id,
+                    "topic": original_content.topic,
+                    "transformation_type": "original",
+                    "created_at": original_content.created_at.isoformat(),
+                    "is_current": False
+                })
+            
+            # 같은 원본을 가진 다른 변환들 찾기
+            other_transformations = db.query(ContentModel).filter(
+                ContentModel.content_metadata.contains(f'"original_content_id": "{original_id}"'),
+                ContentModel.id != content_id
+            ).all()
+            
+            for trans in other_transformations:
+                trans_metadata = json.loads(trans.content_metadata) if trans.content_metadata else {}
+                transformations.append({
+                    "id": trans.id,
+                    "topic": trans.topic,
+                    "transformation_type": trans_metadata.get('transformation_type', 'unknown'),
+                    "created_at": trans.created_at.isoformat(),
+                    "is_current": False
+                })
+        else:
+            # 현재 콘텐츠가 원본
+            transformations.append({
+                "id": original.id,
+                "topic": original.topic,
+                "transformation_type": "original",
+                "created_at": original.created_at.isoformat(),
+                "is_current": True
+            })
+        
+        # 변환된 버전들 추가
+        for trans in transformed_contents:
+            trans_metadata = json.loads(trans.content_metadata) if trans.content_metadata else {}
+            transformations.append({
+                "id": trans.id,
+                "topic": trans.topic,
+                "transformation_type": trans_metadata.get('transformation_type', 'unknown'),
+                "created_at": trans.created_at.isoformat(),
+                "is_current": trans.id == content_id
+            })
+        
+        # 현재 콘텐츠 표시
+        current_metadata = json.loads(original.content_metadata) if original.content_metadata else {}
+        if current_metadata.get('is_transformed'):
+            current_type = current_metadata.get('transformation_type', 'unknown')
+        else:
+            current_type = 'original'
+        
+        # 시간순 정렬
+        transformations.sort(key=lambda x: x['created_at'])
+        
+        # 현재 콘텐츠 표시 업데이트
+        for trans in transformations:
+            if trans['id'] == content_id:
+                trans['is_current'] = True
+        
+        return {
+            "current_content_id": content_id,
+            "current_type": current_type,
+            "transformations": transformations,
+            "total": len(transformations)
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        app_logger.error(f"변환 이력 조회 실패: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="변환 이력 조회 중 오류가 발생했습니다")
 
 @router.get("/workflow/summary")
 async def get_workflow_summary():

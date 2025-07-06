@@ -19,20 +19,37 @@ interface ContentViewerProps {
 }
 
 type CopyType = 'text' | 'html' | 'naver'
+type ViewMode = 'original' | 'text' | 'html'
 
 export default function ContentViewer({ content, onDelete }: ContentViewerProps) {
   const [showThinking, setShowThinking] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showCopyMenu, setShowCopyMenu] = useState(false)
   const [showDownloadMenu, setShowDownloadMenu] = useState(false)
-  const [previewMode, setPreviewMode] = useState(false)
   const [htmlPreviewMode, setHtmlPreviewMode] = useState(false)
   const [transforming, setTransforming] = useState(false)
   const [transformedContent, setTransformedContent] = useState<any>(null)
   const [showTransformMenu, setShowTransformMenu] = useState(false)
+  const [transformations, setTransformations] = useState<any[]>([])
+  const [showTransformationsList, setShowTransformationsList] = useState(false)
+  const [viewMode, setViewMode] = useState<ViewMode>('original')
   const copyMenuRef = useRef<HTMLDivElement>(null)
   const downloadMenuRef = useRef<HTMLDivElement>(null)
   const transformMenuRef = useRef<HTMLDivElement>(null)
+
+  // 변환 이력 가져오기
+  useEffect(() => {
+    fetchTransformations()
+  }, [content.id])
+
+  const fetchTransformations = async () => {
+    try {
+      const response = await axios.get(`/api/v1/contents/transformations/${content.id}`)
+      setTransformations(response.data.transformations)
+    } catch (error) {
+      console.error('변환 이력 조회 실패:', error)
+    }
+  }
 
   // Click outside handler
   useEffect(() => {
@@ -70,6 +87,22 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
   const isHtmlContent = (text: string) => {
     // Check if content contains HTML tags
     return /<[^>]+>/.test(text)
+  }
+  
+  // HTML 콘텐츠를 일반 텍스트로 변환
+  const stripHtmlTags = (html: string) => {
+    // HTML 태그 제거
+    let text = html.replace(/<[^>]*>/g, '')
+    // HTML 엔티티 디코드
+    text = text.replace(/&nbsp;/g, ' ')
+    text = text.replace(/&lt;/g, '<')
+    text = text.replace(/&gt;/g, '>')
+    text = text.replace(/&amp;/g, '&')
+    text = text.replace(/&quot;/g, '"')
+    text = text.replace(/&#39;/g, "'")
+    // 연속된 공백 제거
+    text = text.replace(/\s+/g, ' ')
+    return text.trim()
   }
 
   const formatContent = (text: string) => {
@@ -250,6 +283,9 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
       }
       alert(messages[transformationType])
       
+      // 변환 이력 새로고침
+      fetchTransformations()
+      
     } catch (error) {
       console.error('콘텐츠 변환 실패:', error)
       alert('콘텐츠 변환에 실패했습니다.')
@@ -261,7 +297,10 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
   const copyToClipboard = async (type: CopyType = 'text') => {
     try {
       if (type === 'text') {
-        await navigator.clipboard.writeText(displayContent.content)
+        const textContent = isHtmlContent(displayContent.content) 
+          ? stripHtmlTags(displayContent.content) 
+          : displayContent.content
+        await navigator.clipboard.writeText(textContent)
       } else if (type === 'html') {
         const html = generateNaverHTML(displayContent.content)
         await navigator.clipboard.writeText(html)
@@ -527,13 +566,40 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
             </button>
           )}
           
-          {/* Preview Mode Toggle */}
-          <button
-            onClick={() => setPreviewMode(!previewMode)}
-            className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 transition-colors"
-          >
-            {previewMode ? '📝 원본 보기' : '👁️ 네이버 미리보기'}
-          </button>
+          {/* View Mode Selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">보기 모드:</span>
+            <button
+              onClick={() => setViewMode('original')}
+              className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
+                viewMode === 'original' 
+                  ? 'bg-primary-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              원본
+            </button>
+            <button
+              onClick={() => setViewMode('text')}
+              className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
+                viewMode === 'text' 
+                  ? 'bg-primary-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              텍스트
+            </button>
+            <button
+              onClick={() => setViewMode('html')}
+              className={`px-3 py-1 text-sm font-medium rounded transition-colors ${
+                viewMode === 'html' 
+                  ? 'bg-primary-600 text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              HTML
+            </button>
+          </div>
           
           {/* HTML Copy Mode Toggle */}
           <button
@@ -552,11 +618,83 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
               {showThinking ? '▲' : '▼'} AI 사고 과정 {showThinking ? '숨기기' : '보기'}
             </button>
           )}
+          
+          {/* 변환 이력 보기 버튼 */}
+          {transformations.length > 0 && (
+            <button
+              onClick={() => setShowTransformationsList(!showTransformationsList)}
+              className="flex items-center gap-2 text-sm text-purple-600 hover:text-purple-700 transition-colors font-medium"
+            >
+              📚 변환 이력 보기 ({transformations.length}개)
+            </button>
+          )}
         </div>
       </div>
 
       {/* Content */}
       <div className="p-6">
+        {/* 변환 이력 목록 */}
+        {showTransformationsList && transformations.length > 0 && (
+          <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+            <h3 className="font-semibold text-purple-900 mb-3">🔄 변환 이력</h3>
+            <div className="space-y-2">
+              {transformations.map((transform: any) => (
+                <div
+                  key={transform.id}
+                  className="flex items-center justify-between p-3 bg-white rounded-md border border-purple-100 hover:border-purple-300 transition-colors cursor-pointer"
+                  onClick={() => {
+                    setTransformedContent(transform)
+                    setShowTransformationsList(false)
+                  }}
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        {transform.transformation_type === 'humanize' && '🤗 사람처럼 변환'}
+                        {transform.transformation_type === 'simplify' && '📚 쉽게 설명'}
+                        {transform.transformation_type === 'practical' && '💪 실용적으로'}
+                        {transform.transformation_type === 'natural_format' && '✍️ 자연스러운 서식'}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {new Date(transform.created_at).toLocaleString('ko-KR')}
+                      </span>
+                    </div>
+                    {transform.id === displayContent.id && (
+                      <span className="text-xs text-purple-600">✓ 현재 보는 중</span>
+                    )}
+                  </div>
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              ))}
+              
+              {/* 원본 보기 옵션 */}
+              <div
+                className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 hover:border-gray-400 transition-colors cursor-pointer"
+                onClick={() => {
+                  setTransformedContent(null)
+                  setShowTransformationsList(false)
+                }}
+              >
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-700">📝 원본</span>
+                    <span className="text-xs text-gray-500">
+                      {new Date(content.created_at).toLocaleString('ko-KR')}
+                    </span>
+                  </div>
+                  {!transformedContent && (
+                    <span className="text-xs text-blue-600">✓ 현재 보는 중</span>
+                  )}
+                </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Thinking Process */}
         {showThinking && content.thinking_process && (
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -567,7 +705,7 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
 
         {/* Main Content */}
         <div className="prose prose-lg max-w-none">
-          {content.content_type === 'shorts' && !previewMode && (
+          {content.content_type === 'shorts' && (
             <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <p className="text-sm text-yellow-800">
                 💡 이 스크립트는 45-60초 분량의 YouTube Shorts용으로 작성되었습니다.
@@ -589,26 +727,45 @@ export default function ContentViewer({ content, onDelete }: ContentViewerProps)
                   userSelect: 'text',
                   cursor: 'text'
                 }}
-                dangerouslySetInnerHTML={{ __html: isHtmlContent(displayContent.content) ? displayContent.content : generateNaverHTML(displayContent.content) }}
-              />
-            </div>
-          ) : previewMode ? (
-            <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
-              <div className="text-sm text-gray-500 mb-4 text-center">
-                ⬇️ 네이버 블로그 미리보기 ⬇️
-              </div>
-              <div 
-                className="naver-preview" 
-                dangerouslySetInnerHTML={{ __html: generateNaverHTML(displayContent.content) }}
-                style={{
-                  fontFamily: '"Malgun Gothic", "맑은 고딕", sans-serif',
-                  lineHeight: '1.8',
-                  color: '#333'
-                }}
+                dangerouslySetInnerHTML={{ __html: generateNaverHTML(isHtmlContent(displayContent.content) ? stripHtmlTags(displayContent.content) : displayContent.content) }}
               />
             </div>
           ) : (
-            formatContent(displayContent.content)
+            <div className="content-display">
+              {viewMode === 'original' && (
+                // 원본 모드: HTML이든 텍스트든 원본 그대로 표시
+                isHtmlContent(displayContent.content) ? (
+                  <div 
+                    className="prose prose-lg max-w-none html-content"
+                    style={{
+                      fontFamily: '"Malgun Gothic", "맑은 고딕", sans-serif',
+                      lineHeight: '1.8',
+                      color: '#333'
+                    }}
+                    dangerouslySetInnerHTML={{ __html: displayContent.content }}
+                  />
+                ) : (
+                  formatContent(displayContent.content)
+                )
+              )}
+              {viewMode === 'text' && (
+                // 텍스트 모드: HTML 태그 제거하고 텍스트만 표시 (줄바꿈 유지)
+                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                  {isHtmlContent(displayContent.content) 
+                    ? stripHtmlTags(displayContent.content)
+                    : displayContent.content
+                  }
+                </div>
+              )}
+              {viewMode === 'html' && (
+                // HTML 모드: HTML 코드를 그대로 표시
+                <pre className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+                  <code className="text-sm">
+                    {displayContent.content}
+                  </code>
+                </pre>
+              )}
+            </div>
           )}
         </div>
 

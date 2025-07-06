@@ -122,4 +122,76 @@
     border-radius: 8px;
     border-left: 4px solid #27ae60;
   }
+  
+  /* HTML Content Styles */
+  .html-content table {
+    @apply w-full mb-6 border-collapse;
+    border: 1px solid #ddd;
+  }
+  
+  .html-content th {
+    @apply p-3 text-left font-semibold;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+  }
+  
+  .html-content td {
+    @apply p-3;
+    border: 1px solid #ddd;
+  }
+  
+  .html-content tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .html-content h1,
+  .html-content h2 {
+    @apply font-bold mt-6 mb-4 text-2xl;
+    color: #333;
+  }
+  
+  .html-content h3 {
+    @apply font-bold mt-5 mb-3 text-xl;
+    color: #555;
+  }
+  
+  .html-content h4 {
+    @apply font-bold mt-4 mb-2 text-lg;
+    color: #666;
+  }
+  
+  .html-content p {
+    @apply mb-4;
+    line-height: 1.8;
+  }
+  
+  .html-content ul,
+  .html-content ol {
+    @apply ml-6 mb-4;
+  }
+  
+  .html-content li {
+    @apply mb-2;
+    line-height: 1.8;
+  }
+  
+  .html-content strong {
+    @apply font-bold;
+    color: #333;
+  }
+  
+  .html-content em {
+    @apply italic;
+  }
+  
+  .html-content hr {
+    @apply my-6 border-t border-gray-300;
+  }
+  
+  /* 특수 박스 스타일 */
+  .html-content div[style*="background-color: #fff5b4"],
+  .html-content div[style*="background-color: #fee"],
+  .html-content div[style*="background-color: #e8f8f5"] {
+    @apply mb-4 rounded-lg;
+  }
 }

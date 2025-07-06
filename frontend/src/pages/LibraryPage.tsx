@@ -68,6 +68,27 @@ export default function LibraryPage() {
         return '📝'
     }
   }
+  
+  // HTML 태그 제거 함수
+  const stripHtmlTags = (html: string) => {
+    // HTML 태그 제거
+    let text = html.replace(/<[^>]*>/g, '')
+    // HTML 엔티티 디코드
+    text = text.replace(/&nbsp;/g, ' ')
+    text = text.replace(/&lt;/g, '<')
+    text = text.replace(/&gt;/g, '>')
+    text = text.replace(/&amp;/g, '&')
+    text = text.replace(/&quot;/g, '"')
+    text = text.replace(/&#39;/g, "'")
+    // 연속된 공백 제거
+    text = text.replace(/\s+/g, ' ')
+    return text.trim()
+  }
+  
+  // HTML 콘텐츠 검사
+  const isHtmlContent = (text: string) => {
+    return /<[^>]+>/.test(text)
+  }
 
   return (
     <div>
@@ -132,9 +153,28 @@ export default function LibraryPage() {
               <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                 {content.topic}
               </h3>
-              <p className="text-sm text-gray-600 mb-2 line-clamp-3">
-                {content.content.substring(0, 150)}...
-              </p>
+              <div className="text-sm text-gray-600 mb-2 line-clamp-3">
+                {/* 콘텐츠 내용 미리보기 - HTML 및 포맷 제거하고 텍스트만 추출 */}
+                {(() => {
+                  let text = content.content
+                  // HTML 콘텐츠인 경우 태그 제거
+                  if (isHtmlContent(text)) {
+                    text = stripHtmlTags(text)
+                  }
+                  // 마크다운 포맷 제거
+                  text = text
+                    .replace(/^#{1,6}\s/gm, '') // 제목 마크다운 제거
+                    .replace(/\*\*(.*?)\*\*/g, '$1') // 굵은 글씨 제거
+                    .replace(/\*(.*?)\*/g, '$1') // 이탤릭 제거
+                    .replace(/\[\d+:\d+-\d+:\d+\]/g, '') // 타임스탬프 제거
+                    .replace(/^[-*•]\s/gm, '') // 불릿 포인트 제거
+                    .replace(/^\d+\.\s/gm, '') // 번호 목록 제거
+                    .replace(/\n\n+/g, ' ') // 줄바꿈을 공백으로
+                    .replace(/^[-=]{3,}$/gm, '') // 구분선 제거
+                    .trim()
+                  return text.substring(0, 150) + '...'
+                })()}
+              </div>
               {content.metadata?.papers && content.metadata.papers.length > 0 && (
                 <div className="text-xs text-gray-500 mb-2">
                   📚 논문 {content.metadata.papers.length}개 참조

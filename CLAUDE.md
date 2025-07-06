@@ -334,3 +334,21 @@ function CategoryCard({ category }) {
 - **Ensure category-specific tone and style** for different content types
 - **File-based caching** for improved performance
 - **Tailwind CSS consistency** across all UI components
+
+### Git Commit Guidelines
+- **ALWAYS commit changes after completing any task or feature**
+- **Commit frequently**: After each meaningful change or fix
+- **Use descriptive commit messages** in Korean or English
+- **Include what was changed and why** in the commit message
+- **Example commit format**:
+  ```bash
+  git add -A
+  git commit -m "fix: HTML 콘텐츠 표시 문제 수정 - 전체보기에서 원본 그대로 표시하도록 변경"
+  ```
+- **Common commit types**:
+  - `feat:` 새로운 기능 추가
+  - `fix:` 버그 수정
+  - `refactor:` 코드 리팩토링
+  - `style:` 코드 스타일 변경 (공백, 포맷팅 등)
+  - `docs:` 문서 수정
+  - `chore:` 빌드 프로세스 또는 보조 도구 변경
