@@ -309,8 +309,8 @@ async def list_contents(
 ):
     """생성된 콘텐츠 목록 조회"""
     try:
-        # 데이터베이스에서 콘텐츠 조회
-        query = db.query(ContentModel)
+        # 데이터베이스에서 콘텐츠 조회 (shorts 제외)
+        query = db.query(ContentModel).filter(ContentModel.content_type != 'shorts')
         
         # 필터링
         if content_type:
@@ -326,6 +326,10 @@ async def list_contents(
         # GeneratedContent 객체로 변환
         contents = []
         for db_content in db_contents:
+            # shorts 타입은 건너뛰기 (더 이상 지원하지 않음)
+            if db_content.content_type == 'shorts':
+                continue
+                
             metadata = json.loads(db_content.content_metadata) if db_content.content_metadata else {}
             
             content = GeneratedContent(
@@ -341,8 +345,8 @@ async def list_contents(
             )
             contents.append(content)
         
-        # 전체 개수 조회
-        total_query = db.query(ContentModel)
+        # 전체 개수 조회 (shorts 제외)
+        total_query = db.query(ContentModel).filter(ContentModel.content_type != 'shorts')
         if content_type:
             total_query = total_query.filter(ContentModel.content_type == content_type.value)
         if category_id:
@@ -375,6 +379,10 @@ async def get_content(content_id: str, db: Session = Depends(get_db)):
         
         if not db_content:
             raise HTTPException(status_code=404, detail="콘텐츠를 찾을 수 없습니다")
+        
+        # shorts 타입은 더 이상 지원하지 않음
+        if db_content.content_type == 'shorts':
+            raise HTTPException(status_code=404, detail="Shorts 콘텐츠는 더 이상 지원되지 않습니다")
         
         # GeneratedContent 객체로 변환
         metadata = json.loads(db_content.content_metadata) if db_content.content_metadata else {}
