@@ -1,0 +1,44 @@
+{
+  "timestamp": "2025-07-03T10:56:18.962211",
+  "api_connectivity": {
+    "status": "SUCCESS",
+    "response_time": 0.6984782218933105,
+    "score": 100.0,
+    "message": "API 연결 성공 (0.70초)"
+  },
+  "content_generation_speed": {
+    "average_time": 2.008216698964437,
+    "individual_times": [
+      2.180001735687256,
+      2.0279483795166016,
+      1.8166999816894531
+    ],
+    "score": 100.0,
+    "evaluation": "우수"
+  },
+  "quality_consistency": {
+    "average_quality": 86.66666666666667,
+    "individual_scores": [
+      90,
+      80,
+      90
+    ],
+    "consistency": 90,
+    "score": 88.33333333333334,
+    "evaluation": "우수"
+  },
+  "memory_efficiency": {
+    "memory_before": "N/A",
+    "memory_after": "N/A",
+    "memory_increase": "N/A",
+    "score": 80.0,
+    "evaluation": "측정 불가 (psutil 필요)"
+  },
+  "error_handling": {
+    "total_tests": 3,
+    "passed_tests": 1,
+    "score": 33.33333333333333,
+    "evaluation": "개선 필요"
+  },
+  "overall_score": 80.33333333333334
+}

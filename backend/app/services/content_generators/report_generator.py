@@ -1,0 +1,72 @@
+"""
+리포트 생성기 - 종합적인 분석 리포트 생성
+"""
+
+from typing import List, Dict, Any, Optional
+import time
+from types import SimpleNamespace
+
+class ReportGenerator:
+    """종합 리포트 생성기"""
+    
+    def __init__(self):
+        self.content_type = "report"
+        
+    def generate(self, topic: str, papers: List[Any], 
+                 category_id: str = None,
+                 additional_context: str = None, **kwargs) -> Any:
+        """리포트 생성"""
+        
+        # GeminiClient import
+        from ..gemini_client import GeminiClient, SubcategoryResult, PaperInfo
+        
+        # additional_context에서 실제 정보 추출
+        import json
+        context_data = {}
+        if additional_context:
+            try:
+                context_data = json.loads(additional_context)
+            except json.JSONDecodeError:
+                pass
+        
+        # SubcategoryResult 객체 생성
+        paper_objects = []
+        for paper in papers:
+            if isinstance(paper, dict):
+                paper_objects.append(PaperInfo(
+                    title=paper.get('title', 'Unknown Title'),
+                    authors=paper.get('authors', 'Unknown Authors'),
+                    journal=paper.get('journal', 'Unknown Journal'),
+                    year=paper.get('publication_year', paper.get('year', 2024)),
+                    doi=paper.get('doi', ''),
+                    impact_factor=paper.get('impact_factor', 0.0),
+                    citations=paper.get('citations', 0),
+                    paper_type=paper.get('paper_type', 'research')
+                ))
+        
+        # 서브카테고리 결과 생성
+        subcategory = SubcategoryResult(
+            name=topic,
+            description=context_data.get('subcategory_description', ''),
+            papers=paper_objects,
+            expected_effect=context_data.get('expected_effect', ''),
+            quality_score=context_data.get('quality_score', 80.0),
+            quality_grade=context_data.get('quality_grade', 'B')
+        )
+        
+        # Gemini API를 사용하여 콘텐츠 생성
+        gemini_client = GeminiClient()
+        result = gemini_client.generate_content(subcategory, 'report')
+        
+        # API가 기대하는 형식으로 반환
+        return SimpleNamespace(
+            content=result.get('content', ''),
+            tone='professional',  # 전문적인 톤
+            quality_score=result.get('quality_score', 80.0),
+            metadata={
+                "content_type": "report",
+                "topic": topic,
+                "papers_used": len(papers),
+                "generation_time": time.time()
+            }
+        )

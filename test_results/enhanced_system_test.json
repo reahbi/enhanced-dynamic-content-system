@@ -1,0 +1,117 @@
+{
+  "test_timestamp": "2025-07-03T11:04:48.106388",
+  "main_categories": [
+    {
+      "name": "**⏱️ 7분 기적",
+      "description": "초단기 고강도 운동 루틴**",
+      "emoji": "🎯",
+      "trend_score": 8.0,
+      "research_activity": 7.0
+    },
+    {
+      "name": "**💪 부위별 고민 해결사",
+      "description": "맞춤 운동 가이드 (뱃살, 팔뚝, 허벅지 집중 공략)**",
+      "emoji": "🎯",
+      "trend_score": 8.0,
+      "research_activity": 7.0
+    },
+    {
+      "name": "**🛌 꿀잠 보장 운동",
+      "description": "숙면을 위한 최적의 운동 시간 & 방법**",
+      "emoji": "🎯",
+      "trend_score": 8.0,
+      "research_activity": 7.0
+    },
+    {
+      "name": "**🩺 운동 초보 맞춤 가이드",
+      "description": "부상 없이 시작하는 단계별 운동법**",
+      "emoji": "🎯",
+      "trend_score": 8.0,
+      "research_activity": 7.0
+    },
+    {
+      "name": "**🍎 50+ 액티브 시니어",
+      "description": "활기찬 노후를 위한 맞춤 운동 & 식단**",
+      "emoji": "🎯",
+      "trend_score": 8.0,
+      "research_activity": 7.0
+    }
+  ],
+  "subcategories": [
+    {
+      "name": "**뇌파 리셋 7분 명상: 번아웃 OUT! 창의력 UP!**",
+      "description": "7분간의 특정 주파수 유도 명상이 스트레스 감소 및 인지 기능 향상에 미치는 영향",
+      "papers": [
+        {
+          "title": "The Effect of Meditation on Alpha and Theta Brainwave Activity: A Systematic Review and Meta-Analysis",
+          "authors": "Tang YY et al.",
+          "journal": "Frontiers in Neuroscience",
+          "year": 2020,
+          "doi": "10.3389/fnins.2020.00545",
+          "impact_factor": 5.2,
+          "citations": 180,
+          "paper_type": "Systematic Review & Meta-analysis"
+        }
+      ],
+      "quality_info": {
+        "total_score": 66.4,
+        "quality_grade": "B+ (양호한 근거)",
+        "paper_type_score": 35,
+        "impact_factor_score": 10.4,
+        "citation_score": 18.0,
+        "recency_score": 3
+      },
+      "expected_effect": "7분 명상으로 스트레스 호르몬 감소, 집중력 향상, 창의적 사고 증진"
+    },
+    {
+      "name": "**7분 만에 혈당 스파이크 잠재우기: 식후 활력 부스팅 루틴**",
+      "description": "식후 7분간의 가벼운 신체 활동이 혈당 조절 및 인슐린 민감도 개선에 미치는 영향",
+      "papers": [
+        {
+          "title": "The effects of brief bouts of light walking on postprandial glycemia in adults: A systematic review",
+          "authors": "Colberg SR et al.",
+          "journal": "American Journal of Lifestyle Medicine",
+          "year": 2018,
+          "doi": "10.1177/1559827618760320",
+          "impact_factor": 5.1,
+          "citations": 95,
+          "paper_type": "Systematic Review"
+        }
+      ],
+      "quality_info": {
+        "total_score": 54.7,
+        "quality_grade": "B (적절한 근거)",
+        "paper_type_score": 35,
+        "impact_factor_score": 10.2,
+        "citation_score": 9.5,
+        "recency_score": 0
+      },
+      "expected_effect": "식후 혈당 급상승 억제, 인슐린 저항성 개선, 활력 증진 및 체중 관리"
+    },
+    {
+      "name": "**7분 꿀잠 마법: 수면의 질 극대화하는 이완 요법**",
+      "description": "7분간의 점진적 근육 이완 (Progressive Muscle Relaxation, PMR) 훈련이 수면의 질과 불면증 증상 완화에 미치는 영향",
+      "papers": [
+        {
+          "title": "Effectiveness of Progressive Muscle Relaxation Training for Insomnia: A Meta-Analysis",
+          "authors": "Trauer JM et al.",
+          "journal": "Journal of Consulting and Clinical Psychology",
+          "year": 2015,
+          "doi": "10.1037/ccp0000033",
+          "impact_factor": 5.8,
+          "citations": 215,
+          "paper_type": "Meta-analysis"
+        }
+      ],
+      "quality_info": {
+        "total_score": 66.6,
+        "quality_grade": "B+ (양호한 근거)",
+        "paper_type_score": 35,
+        "impact_factor_score": 11.6,
+        "citation_score": 20,
+        "recency_score": 0
+      },
+      "expected_effect": "수면 잠복기 단축, 수면 시간 증가, 수면 중 각성 감소, 깊은 수면 단계 증가"
+    }
+  ]
+}

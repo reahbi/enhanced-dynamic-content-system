@@ -1,0 +1,87 @@
+{
+  "test_timestamp": "2025-07-03T11:03:55.762909",
+  "improvement_focus": "실용성과 즉시 관심도 향상",
+  "categories": [
+    {
+      "name": "뱃살 빼는 최고의 유산소 운동",
+      "description": "헬스장 vs 집, 나에게 맞는 운동법은?",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "무릎 통증 없이 스쿼트 하는 법",
+      "description": "5단계 자세 교정 가이드",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "30대 여성을 위한 맞춤 필라테스",
+      "description": "자세 교정 & 라인 만들기",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "10분 만에 끝내는 전신 스트레칭 루틴",
+      "description": "뻣뻣함 해소 & 피로 회복",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "아침 공복 운동 vs 저녁 운동",
+      "description": "효과적인 시간대 선택법",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "헬린이를 위한 3대 운동 완벽 가이드",
+      "description": "자세부터 루틴까지",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "힙업 운동의 모든 것",
+      "description": "애플힙 만드는 최고의 운동 조합",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "폼롤러 마사지 효과 극대화",
+      "description": "부위별 꿀팁 대방출",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "다이어트 정체기 극복 운동법",
+      "description": "체지방 연소 UP!",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    },
+    {
+      "name": "남자 어깨 넓어지는 운동 루틴",
+      "description": "헬스장 vs 홈트, 효과 비교",
+      "emoji": "🎯",
+      "practicality_score": 9.0,
+      "interest_level": 8.5
+    }
+  ],
+  "analysis": {
+    "total_categories": 10,
+    "average_practicality": 9.0,
+    "average_interest": 8.5,
+    "improvement_areas": [
+      "추상적 → 구체적",
+      "트렌디 → 실용적",
+      "미래지향 → 즉시 필요",
+      "개념적 → 실행 가능"
+    ]
+  }
+}

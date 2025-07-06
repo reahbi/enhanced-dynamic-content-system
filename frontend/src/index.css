@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply text-gray-900;
+  }
+  
+  body {
+    @apply min-h-screen bg-gray-50;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+  }
+  
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+  
+  /* Naver Blog Preview Styles */
+  .naver-preview {
+    font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+  }
+  
+  .naver-preview h1, 
+  .naver-preview h2 {
+    @apply font-bold mt-8 mb-6;
+    font-size: 28px !important;
+    color: #333 !important;
+    letter-spacing: -0.5px;
+  }
+  
+  .naver-preview h3 {
+    @apply font-bold mt-6 mb-4;
+    font-size: 22px !important;
+    color: #555 !important;
+  }
+  
+  .naver-preview h4 {
+    @apply font-bold mt-4 mb-3;
+    font-size: 18px !important;
+    color: #666 !important;
+  }
+  
+  .naver-preview p {
+    @apply mb-4;
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    color: #333 !important;
+  }
+  
+  .naver-preview ul,
+  .naver-preview ol {
+    @apply ml-8 mb-4;
+    padding-left: 20px !important;
+  }
+  
+  .naver-preview li {
+    @apply mb-3;
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    color: #333 !important;
+  }
+  
+  .naver-preview ul li {
+    @apply list-disc;
+  }
+  
+  .naver-preview ol li {
+    @apply list-decimal;
+  }
+  
+  .naver-preview strong {
+    @apply font-bold;
+    color: #333 !important;
+    font-weight: 700 !important;
+  }
+  
+  .naver-preview em {
+    @apply italic;
+    color: #555;
+  }
+  
+  .naver-preview hr {
+    @apply my-8 border-none;
+    border-top: 1px solid #ddd !important;
+  }
+  
+  /* 네이버 특수 박스 스타일 */
+  .naver-tip-box {
+    background-color: #fff5b4;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    border-left: 4px solid #f1c40f;
+  }
+  
+  .naver-warning-box {
+    background-color: #fee;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .naver-check-box {
+    background-color: #e8f8f5;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    border-left: 4px solid #27ae60;
+  }
+}
