@@ -7,7 +7,6 @@ from enum import Enum
 
 class ContentType(Enum):
     """콘텐츠 타입"""
-    SHORTS = "shorts"
     ARTICLE = "article"
     REPORT = "report"
     CATEGORY = "category"
@@ -49,39 +48,6 @@ class ThinkingPromptEngineer:
         """콘텐츠 타입별 템플릿 초기화"""
         
         templates = {
-            ContentType.SHORTS: """
-<thinking>
-주제: {topic}
-타겟: {target_audience}
-논문 수: {paper_count}
-
-YouTube Shorts 스크립트 작성을 위한 사고 과정:
-
-1. 핵심 메시지 도출
-   - 이 주제에서 가장 임팩트 있는 정보는 무엇인가?
-   - 45-60초 안에 전달할 수 있는 핵심은?
-   - 시청자가 즉시 실천할 수 있는 팁은?
-
-2. 훅(Hook) 전략
-   - 첫 5초에 시청자를 사로잡을 방법은?
-   - 호기심을 유발하는 질문이나 통계는?
-   - 타겟층의 pain point와 연결점은?
-
-3. 콘텐츠 구성
-   - 논문의 핵심 발견을 어떻게 쉽게 설명할까?
-   - 시각적으로 표현하기 좋은 내용은?
-   - 기억하기 쉬운 3가지 포인트는?
-
-4. CTA 설계
-   - 시청자가 바로 행동할 수 있는 것은?
-   - 다음 콘텐츠로 유도하는 방법은?
-   - 댓글이나 좋아요를 유도하는 멘트는?
-
-논문 정보:
-{papers}
-</thinking>
-""",
-            
             ContentType.ARTICLE: """
 <thinking>
 주제: {topic}

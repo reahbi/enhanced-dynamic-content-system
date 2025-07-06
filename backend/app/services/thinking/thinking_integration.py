@@ -7,7 +7,6 @@ import asyncio
 from datetime import datetime
 
 from ..content_generators.base_generator import BaseContentGenerator, GeneratedContent
-from ..content_generators.shorts_generator import ShortsScriptGenerator
 from ..content_generators.article_generator import ArticleGenerator
 from ..content_generators.report_generator import ReportGenerator
 from .native_thinking_engine import NativeThinkingEngine, ThinkingResult
@@ -24,7 +23,6 @@ class ThinkingEnabledContentGenerator:
         
         # 콘텐츠 생성기들
         self.generators = {
-            ContentType.SHORTS: ShortsScriptGenerator(),
             ContentType.ARTICLE: ArticleGenerator(),
             ContentType.REPORT: ReportGenerator()
         }
