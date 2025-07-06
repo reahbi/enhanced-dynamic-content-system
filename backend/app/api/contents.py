@@ -250,23 +250,19 @@ async def generate_content(
             app_logger.info("[TOTAL WORKFLOW SUMMARY] 전체 워크플로우 토큰 사용량 총합")
             app_logger.info("="*80)
             
-            # 현재 세션의 전체 토큰 사용량 계산
-            total_prompt_tokens = 0
-            total_response_tokens = 0
-            total_tokens = 0
-            total_cost = 0.0
+            # 현재 세션의 전체 토큰 사용량 가져오기
+            summary = token_tracker.get_session_summary()
             
-            for operation, usage in token_tracker.usage_by_operation.items():
-                total_prompt_tokens += usage['prompt_tokens']
-                total_response_tokens += usage['response_tokens']
-                total_tokens += usage['total_tokens']
+            total_prompt_tokens = summary['total_prompt_tokens']
+            total_response_tokens = summary['total_response_tokens']
+            total_tokens = summary['total_tokens']
+            total_cost_krw = summary['estimated_cost_krw']
             
-            # 비용 계산
-            total_cost_krw = token_tracker._calculate_cost_krw(total_prompt_tokens, total_response_tokens)
+            # USD 비용 계산
             total_cost_usd = token_tracker._calculate_cost_usd(total_prompt_tokens, total_response_tokens)
             
-            app_logger.info(f"전체 프로세스: 카테고리 생성 → 서브카테고리 생성 → 콘텐츠 생성 (shorts/article/report)")
-            app_logger.info(f"총 작업 수: {sum(usage['count'] for usage in token_tracker.usage_by_operation.values())}")
+            app_logger.info(f"전체 프로세스: 카테고리 생성 → 서브카테고리 생성 → 콘텐츠 생성 (article/report)")
+            app_logger.info(f"총 작업 수: {summary['operation_count']}")
             app_logger.info(f"총 토큰 사용량: {total_tokens:,}")
             app_logger.info(f"  - 입력 토큰: {total_prompt_tokens:,}")
             app_logger.info(f"  - 출력 토큰: {total_response_tokens:,}")
