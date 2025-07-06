@@ -15,7 +15,6 @@ from ..models.database import get_db, Content as ContentModel, Category as Categ
 from ..services.advanced_cache_manager import advanced_cache
 from ..services.performance_optimizer import performance_optimizer
 from ..services.thinking.native_thinking_engine import NativeThinkingEngine
-from ..services.content_generators.shorts_generator import ShortsScriptGenerator
 from ..services.content_generators.article_generator import ArticleGenerator
 from ..services.content_generators.report_generator import ReportGenerator
 from ..utils.logging_config import app_logger, audit_logger
@@ -25,7 +24,6 @@ router = APIRouter()
 
 # Enums
 class ContentType(str, Enum):
-    SHORTS = "shorts"
     ARTICLE = "article"
     REPORT = "report"
 
@@ -92,7 +90,6 @@ def get_thinking_engine():
 def get_content_generators():
     """콘텐츠 생성기 인스턴스들"""
     return {
-        ContentType.SHORTS: ShortsScriptGenerator(),
         ContentType.ARTICLE: ArticleGenerator(),
         ContentType.REPORT: ReportGenerator()
     }
@@ -183,7 +180,7 @@ async def generate_content(
         # 메타데이터 준비
         metadata = {
             "tone": generated_content.tone,
-            "word_count": len(generated_content.content.split()),
+            "word_count": len(generated_content.content.split()) if generated_content.content else 0,
             "paper_count": len(papers),
             "generation_method": generator.__class__.__name__,
             "papers": papers  # 논문 정보 추가
